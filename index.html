@@ -661,7 +661,6 @@
         let imagesHtml = ex.pages.map((page, i) =>
             `<div class="page-card">
                 <img src="exercise_images/${page}" alt="Page ${i+1}">
-                <div class="page-label">Page ${i+1} of ${ex.pages.length}</div>
             </div>`
         ).join('');
 
@@ -680,51 +679,45 @@
     <title>अभ्यासः ${ex.number} - ${ex.info}</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Segoe UI', sans-serif; padding: 24px; color: #333; }
+        body { font-family: 'Segoe UI', sans-serif; padding: 0; margin: 0; color: #333; }
+        .print-toolbar { position: sticky; top: 0; z-index: 10; background: #8B4513; color: white; padding: 12px 24px; display: flex; align-items: center; gap: 16px; }
+        .print-toolbar h2 { flex: 1; font-size: 1rem; }
+        .print-toolbar button { padding: 8px 20px; border: none; border-radius: 6px; font-size: 0.9rem; font-weight: 600; cursor: pointer; }
+        .btn-print { background: #fff; color: #8B4513; }
+        .btn-print:hover { background: #f0e0d0; }
+        .content { padding: 20px; }
         .header { text-align: center; border-bottom: 2px solid #8B4513; padding-bottom: 12px; margin-bottom: 20px; }
         .header h1 { font-size: 1.3rem; color: #8B4513; }
         .header p { font-size: 0.9rem; color: #666; margin-top: 4px; }
-        .page-card { margin-bottom: 0; border: none; border-radius: 0; overflow: hidden; page-break-inside: auto; break-inside: auto; }
-        .page-card img { width: 100%; height: auto; max-height: 96vh; object-fit: contain; }
-        .page-label { display: none; }
-        .notes-block { margin-top: 12px; padding: 12px; border: 1px solid #ccc; break-inside: avoid; }
+        .page-card { margin-bottom: 12px; }
+        .page-card img { width: 100%; height: auto; display: block; }
+        .notes-block { margin-top: 16px; padding: 12px; border: 1px solid #E8D5C4; border-radius: 8px; }
         .notes-block h4 { color: #8B4513; margin-bottom: 6px; }
         .notes-block pre { white-space: pre-wrap; font-family: inherit; font-size: 0.9rem; line-height: 1.6; }
         @media print {
+            .print-toolbar { display: none !important; }
             body { padding: 0; margin: 0; }
-            .page-card { border: none; margin: 0; padding: 0; page-break-after: always; }
-            .page-card:last-of-type { page-break-after: avoid; }
-            .page-card img { width: 100%; height: auto; max-height: 100vh; object-fit: contain; }
-            .page-label { display: none; }
+            .content { padding: 0; }
+            .header { margin-bottom: 8px; }
+            .page-card { margin: 0; padding: 0; page-break-after: always; }
+            .page-card:last-of-type { page-break-after: auto; }
+            .page-card img { width: 100%; max-height: 98vh; object-fit: contain; }
         }
     </style>
 </head>
 <body>
-    <div class="header">
-        <h1>अभ्यासः ${ex.number}</h1>
-        <p>${ex.info}</p>
+    <div class="print-toolbar">
+        <h2>अभ्यासः ${ex.number}</h2>
+        <button class="btn-print" onclick="window.print()">🖨️ Print / Save as PDF</button>
     </div>
-    ${imagesHtml}
-    ${notesHtml}
-    <script>
-        // Wait for images to load, then trigger print
-        let imgs = document.querySelectorAll('img');
-        let loaded = 0;
-        function checkPrint() {
-            loaded++;
-            if (loaded >= imgs.length) {
-                setTimeout(function() { window.print(); }, 300);
-            }
-        }
-        if (imgs.length === 0) {
-            setTimeout(function() { window.print(); }, 300);
-        } else {
-            imgs.forEach(function(img) {
-                if (img.complete) { checkPrint(); }
-                else { img.onload = checkPrint; img.onerror = checkPrint; }
-            });
-        }
-    <\/script>
+    <div class="content">
+        <div class="header">
+            <h1>अभ्यासः ${ex.number}</h1>
+            <p>${ex.info}</p>
+        </div>
+        ${imagesHtml}
+        ${notesHtml}
+    </div>
 </body>
 </html>`);
         printWin.document.close();
