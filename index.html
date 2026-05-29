@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="sa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>संस्कृत स्वाध्यायः - Sanskrit Workbook</title>
+    <style>
+        :root {
+            --primary: #8B4513;
+            --primary-light: #D2691E;
+            --accent: #DAA520;
+            --bg: #FFF8F0;
+            --sidebar-bg: #2C1810;
+            --sidebar-text: #F5DEB3;
+            --card-bg: #FFFFFF;
+            --shadow: 0 2px 8px rgba(0,0,0,0.1);
+            --border: #E8D5C4;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg);
+            color: #333;
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 320px;
+            min-width: 320px;
+            background: var(--sidebar-bg);
+            color: var(--sidebar-text);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+            z-index: 100;
+        }
+
+        .sidebar-header {
+            padding: 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            text-align: center;
+        }
+
+        .sidebar-header h1 {
+            font-size: 1.3rem;
+            color: var(--accent);
+            margin-bottom: 4px;
+        }
+
+        .sidebar-header p {
+            font-size: 0.8rem;
+            opacity: 0.7;
+        }
+
+        .sidebar-search {
+            padding: 12px 16px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .sidebar-search input {
+            width: 100%;
+            padding: 8px 12px;
+            border-radius: 6px;
+            border: none;
+            background: rgba(255,255,255,0.1);
+            color: var(--sidebar-text);
+            font-size: 0.9rem;
+        }
+
+        .sidebar-search input::placeholder { color: rgba(245,222,179,0.5); }
+
+        .chapter-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 8px;
+        }
+
+        .chapter-list::-webkit-scrollbar { width: 6px; }
+        .chapter-list::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 3px; }
+
+        .chapter-item {
+            padding: 10px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-bottom: 4px;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .chapter-item:hover { background: rgba(255,255,255,0.08); }
+        .chapter-item.active { background: var(--primary); color: white; }
+        .chapter-item.completed { border-left: 3px solid #4CAF50; }
+
+        .chapter-num {
+            min-width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: bold;
+        }
+
+        .chapter-item.active .chapter-num { background: rgba(255,255,255,0.3); }
+        .chapter-item.completed .chapter-num { background: #4CAF50; color: white; }
+
+        .chapter-title {
+            font-size: 0.85rem;
+            line-height: 1.3;
+        }
+
+        .chapter-status {
+            margin-left: auto;
+            font-size: 0.7rem;
+            opacity: 0.7;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .toolbar {
+            display: flex;
+            align-items: center;
+            padding: 12px 24px;
+            background: var(--card-bg);
+            border-bottom: 1px solid var(--border);
+            box-shadow: var(--shadow);
+            gap: 12px;
+        }
+
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--primary);
+        }
+
+        .toolbar h2 {
+            font-size: 1.1rem;
+            color: var(--primary);
+            flex: 1;
+        }
+
+        .toolbar-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-primary:hover { background: var(--primary-light); }
+        .btn-secondary { background: var(--border); color: var(--primary); }
+        .btn-secondary:hover { background: #d4c0b0; }
+        .btn-success { background: #4CAF50; color: white; }
+        .btn-success:hover { background: #45a049; }
+
+        .nav-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        /* Content Area */
+        .content-area {
+            flex: 1;
+            overflow-y: auto;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .welcome-screen {
+            text-align: center;
+            padding: 60px 20px;
+            max-width: 600px;
+        }
+
+        .welcome-screen h2 {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 12px;
+        }
+
+        .welcome-screen .sanskrit-title {
+            font-size: 1.5rem;
+            color: var(--accent);
+            margin-bottom: 24px;
+        }
+
+        .welcome-screen p {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 16px;
+        }
+
+        .stats-bar {
+            display: flex;
+            gap: 24px;
+            justify-content: center;
+            margin-top: 32px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-num {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: #666;
+        }
+
+        /* Exercise View */
+        .exercise-container {
+            width: 100%;
+            max-width: 900px;
+        }
+
+        .exercise-header {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 20px 24px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow);
+            border-left: 4px solid var(--accent);
+        }
+
+        .exercise-header h3 {
+            color: var(--primary);
+            margin-bottom: 4px;
+        }
+
+        .exercise-header .sloka-ref {
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        .exercise-pages {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .exercise-page-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+
+        .exercise-page-card img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .exercise-page-label {
+            padding: 8px 16px;
+            font-size: 0.8rem;
+            color: #888;
+            border-top: 1px solid var(--border);
+        }
+
+        /* Notes Section */
+        .notes-section {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 20px 24px;
+            margin-top: 20px;
+            box-shadow: var(--shadow);
+        }
+
+        .notes-section h4 {
+            color: var(--primary);
+            margin-bottom: 12px;
+            font-size: 0.95rem;
+        }
+
+        .notes-textarea {
+            width: 100%;
+            min-height: 120px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 12px;
+            font-size: 0.9rem;
+            font-family: inherit;
+            resize: vertical;
+            line-height: 1.6;
+        }
+
+        .notes-textarea:focus {
+            outline: none;
+            border-color: var(--primary-light);
+            box-shadow: 0 0 0 3px rgba(139,69,19,0.1);
+        }
+
+        /* Progress */
+        .progress-bar-container {
+            padding: 12px 16px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .progress-bar {
+            height: 6px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4CAF50, #8BC34A);
+            border-radius: 3px;
+            transition: width 0.5s ease;
+        }
+
+        .progress-text {
+            font-size: 0.75rem;
+            margin-top: 6px;
+            text-align: center;
+            opacity: 0.7;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .sidebar {
+                position: fixed;
+                left: 0;
+                top: 0;
+                height: 100vh;
+                transform: translateX(-100%);
+            }
+            .sidebar.open { transform: translateX(0); }
+            .menu-toggle { display: block; }
+            .overlay {
+                display: none;
+                position: fixed;
+                inset: 0;
+                background: rgba(0,0,0,0.5);
+                z-index: 99;
+            }
+            .overlay.show { display: block; }
+            .content-area { padding: 16px; }
+            .toolbar { padding: 12px 16px; }
+        }
+
+        /* Print styles */
+        @media print {
+            .sidebar, .toolbar { display: none; }
+            .content-area { padding: 0; }
+            .exercise-page-card { box-shadow: none; border: 1px solid #ccc; }
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .fade-in { animation: fadeIn 0.3s ease; }
+    </style>
+</head>
+<body>
+    <div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
+
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h1>संस्कृत स्वाध्यायः</h1>
+            <p>तृतीया दीक्षा - संक्षेपरामायणम्</p>
+            <p style="font-size:0.7rem; margin-top:4px;">Teach Yourself Samskrit - Level 3</p>
+        </div>
+
+        <div class="sidebar-search">
+            <input type="text" id="searchInput" placeholder="Search exercises..." oninput="filterChapters()">
+        </div>
+
+        <div class="chapter-list" id="chapterList">
+            <!-- Populated by JS -->
+        </div>
+
+        <div class="progress-bar-container">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+            </div>
+            <div class="progress-text" id="progressText">0 / 0 completed</div>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <div class="toolbar">
+            <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+            <h2 id="toolbarTitle">संक्षेपरामायणम् - Workbook</h2>
+            <div class="toolbar-actions">
+                <button class="btn btn-secondary nav-btn" onclick="navigateExercise(-1)" title="Previous">◀</button>
+                <button class="btn btn-secondary nav-btn" onclick="navigateExercise(1)" title="Next">▶</button>
+                <button class="btn btn-success" id="markCompleteBtn" onclick="toggleComplete()" style="display:none">
+                    ✓ Mark Complete
+                </button>
+                <button class="btn btn-secondary" onclick="resetProgress()" title="Reset Progress">↺</button>
+            </div>
+        </div>
+
+        <div class="content-area" id="contentArea">
+            <div class="welcome-screen" id="welcomeScreen">
+                <h2>नमस्ते! 🙏</h2>
+                <div class="sanskrit-title">संक्षेपरामायणम् अभ्यास-पुस्तिका</div>
+                <p>Welcome to the Samskrita Swadhyaya workbook for <strong>Sanksepa Ramayanam</strong> (Summary of Ramayana) from the Third Level (तृतीया दीक्षा) course by Rashtriya Sanskrit Sansthan.</p>
+                <p>This workbook contains <strong>74 exercises (अभ्यासाः)</strong> covering all 100 shlokas of the Sanksepa Ramayanam. Select an exercise from the sidebar to begin.</p>
+                <p style="font-size:0.85rem; color:#999;">Each exercise includes fill-in-the-blanks, sandhi exercises, word analysis, sentence construction, and more.</p>
+
+                <div class="stats-bar">
+                    <div class="stat-item">
+                        <div class="stat-num" id="statTotal">74</div>
+                        <div class="stat-label">Exercises</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-num" id="statCompleted">0</div>
+                        <div class="stat-label">Completed</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-num" id="statPercent">0%</div>
+                        <div class="stat-label">Progress</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="exercises_data.js"></script>
+    <script>
+    // Exercise manifest - loaded from exercises_data.js
+    let exercises = EXERCISE_DATA;
+    let currentExercise = null;
+    let completedExercises = JSON.parse(localStorage.getItem('skrt_completed') || '{}');
+    let notes = JSON.parse(localStorage.getItem('skrt_notes') || '{}');
+
+    // Initialize
+    document.getElementById('statTotal').textContent = exercises.length;
+    renderChapterList();
+    updateProgress();
+
+    function renderChapterList() {
+        const list = document.getElementById('chapterList');
+        list.innerHTML = exercises.map((ex, i) => {
+            const isCompleted = completedExercises[ex.number];
+            const isActive = currentExercise === i;
+            let classes = 'chapter-item';
+            if (isActive) classes += ' active';
+            if (isCompleted) classes += ' completed';
+
+            // Parse sloka reference from info
+            const info = ex.info;
+            let sloka = '';
+            const match = info.match(/श्लोक[ःs:]\s*(.+?)[\s)]/);
+            if (match) sloka = match[1];
+
+            return `<div class="${classes}" onclick="loadExercise(${i})" data-search="${info}">
+                <div class="chapter-num">${ex.number}</div>
+                <div class="chapter-title">
+                    अभ्यासः ${ex.number}
+                    <br><small style="opacity:0.7">श्लोक ${sloka || ex.number}</small>
+                </div>
+                ${isCompleted ? '<div class="chapter-status">✓</div>' : ''}
+            </div>`;
+        }).join('');
+    }
+
+    function loadExercise(index) {
+        if (index < 0 || index >= exercises.length) return;
+        currentExercise = index;
+        const ex = exercises[index];
+
+        const content = document.getElementById('contentArea');
+        const isComplete = completedExercises[ex.number];
+
+        let html = `<div class="exercise-container fade-in">
+            <div class="exercise-header">
+                <h3>अभ्यासः - ${ex.number}</h3>
+                <div class="sloka-ref">${ex.info}</div>
+            </div>
+            <div class="exercise-pages">`;
+
+        ex.pages.forEach((page, pi) => {
+            html += `<div class="exercise-page-card">
+                <img src="exercise_images/${page}" alt="Exercise ${ex.number} - Page ${pi+1}" loading="lazy">
+                <div class="exercise-page-label">Page ${pi+1} of ${ex.pages.length}</div>
+            </div>`;
+        });
+
+        html += `</div>
+            <div class="notes-section">
+                <h4>📝 Your Notes & Answers</h4>
+                <textarea class="notes-textarea" id="notesArea"
+                    placeholder="Write your answers, notes, and observations here..."
+                    oninput="saveNotes()">${notes[ex.number] || ''}</textarea>
+            </div>
+        </div>`;
+
+        content.innerHTML = html;
+        document.getElementById('welcomeScreen')?.remove();
+
+        // Update toolbar
+        document.getElementById('toolbarTitle').textContent = `अभ्यासः ${ex.number}`;
+        const btn = document.getElementById('markCompleteBtn');
+        btn.style.display = 'inline-flex';
+        btn.textContent = isComplete ? '✓ Completed' : '☐ Mark Complete';
+        btn.className = isComplete ? 'btn btn-success' : 'btn btn-primary';
+
+        renderChapterList();
+        toggleSidebar(false);
+
+        // Scroll to top
+        content.scrollTop = 0;
+    }
+
+    function navigateExercise(direction) {
+        if (currentExercise === null) {
+            loadExercise(0);
+            return;
+        }
+        const next = currentExercise + direction;
+        if (next >= 0 && next < exercises.length) {
+            loadExercise(next);
+        }
+    }
+
+    function toggleComplete() {
+        if (currentExercise === null) return;
+        const ex = exercises[currentExercise];
+        if (completedExercises[ex.number]) {
+            delete completedExercises[ex.number];
+        } else {
+            completedExercises[ex.number] = true;
+        }
+        localStorage.setItem('skrt_completed', JSON.stringify(completedExercises));
+        updateProgress();
+        loadExercise(currentExercise);
+    }
+
+    function saveNotes() {
+        if (currentExercise === null) return;
+        const ex = exercises[currentExercise];
+        const textarea = document.getElementById('notesArea');
+        if (textarea) {
+            notes[ex.number] = textarea.value;
+            localStorage.setItem('skrt_notes', JSON.stringify(notes));
+        }
+    }
+
+    function updateProgress() {
+        const total = exercises.length;
+        const completed = Object.keys(completedExercises).length;
+        const percent = total > 0 ? Math.round((completed / total) * 100) : 0;
+
+        document.getElementById('progressFill').style.width = percent + '%';
+        document.getElementById('progressText').textContent = `${completed} / ${total} completed`;
+        document.getElementById('statCompleted').textContent = completed;
+        document.getElementById('statPercent').textContent = percent + '%';
+    }
+
+    function filterChapters() {
+        const query = document.getElementById('searchInput').value.toLowerCase();
+        const items = document.querySelectorAll('.chapter-item');
+        items.forEach(item => {
+            const text = item.getAttribute('data-search').toLowerCase() +
+                         item.textContent.toLowerCase();
+            item.style.display = text.includes(query) ? '' : 'none';
+        });
+    }
+
+    function toggleSidebar(forceState) {
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('overlay');
+        const isOpen = sidebar.classList.contains('open');
+        const shouldOpen = forceState !== undefined ? forceState : !isOpen;
+
+        if (shouldOpen) {
+            sidebar.classList.add('open');
+            overlay.classList.add('show');
+        } else {
+            sidebar.classList.remove('open');
+            overlay.classList.remove('show');
+        }
+    }
+
+    function resetProgress() {
+        if (confirm('Reset all progress? This will clear completion status and notes.')) {
+            completedExercises = {};
+            notes = {};
+            localStorage.removeItem('skrt_completed');
+            localStorage.removeItem('skrt_notes');
+            updateProgress();
+            renderChapterList();
+        }
+    }
+
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+        if (e.target.tagName === 'TEXTAREA' || e.target.tagName === 'INPUT') return;
+        if (e.key === 'ArrowLeft') navigateExercise(-1);
+        if (e.key === 'ArrowRight') navigateExercise(1);
+        if (e.key === 'Enter' && currentExercise !== null) toggleComplete();
+    });
+    </script>
+</body>
+</html>
