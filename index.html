@@ -390,11 +390,13 @@
             .main-content { overflow: visible; }
             .content-area { padding: 0; overflow: visible; }
             .exercise-container { max-width: 100%; }
-            .exercise-header { box-shadow: none; border: 1px solid #ccc; break-after: avoid; }
-            .exercise-page-card { box-shadow: none; border: 1px solid #ccc; break-inside: avoid; page-break-inside: avoid; margin-bottom: 12px; }
-            .exercise-page-card img { max-width: 100%; height: auto; }
-            .exercise-pages { gap: 8px; }
-            .pdf-header-print { display: block !important; text-align: center; margin-bottom: 16px; font-size: 1.1rem; color: #333; border-bottom: 2px solid #8B4513; padding-bottom: 8px; }
+            .exercise-header { box-shadow: none; border: none; border-left: none; padding: 8px 0; margin-bottom: 0; break-after: avoid; }
+            .exercise-page-card { box-shadow: none; border: none; border-radius: 0; margin-bottom: 0; page-break-after: always; page-break-inside: auto; break-inside: auto; }
+            .exercise-page-card:last-child { page-break-after: avoid; }
+            .exercise-page-card img { max-width: 100%; max-height: 100vh; height: auto; object-fit: contain; }
+            .exercise-page-label { display: none; }
+            .exercise-pages { gap: 0; }
+            .pdf-header-print { display: block !important; text-align: center; margin-bottom: 8px; font-size: 1.1rem; color: #333; border-bottom: 2px solid #8B4513; padding-bottom: 8px; }
         }
 
         /* Animations */
@@ -682,15 +684,18 @@
         .header { text-align: center; border-bottom: 2px solid #8B4513; padding-bottom: 12px; margin-bottom: 20px; }
         .header h1 { font-size: 1.3rem; color: #8B4513; }
         .header p { font-size: 0.9rem; color: #666; margin-top: 4px; }
-        .page-card { margin-bottom: 16px; border: 1px solid #ddd; border-radius: 8px; overflow: hidden; break-inside: avoid; page-break-inside: avoid; }
-        .page-card img { width: 100%; height: auto; display: block; }
-        .page-label { padding: 6px 12px; font-size: 0.75rem; color: #888; border-top: 1px solid #eee; }
-        .notes-block { margin-top: 20px; padding: 16px; border: 1px solid #E8D5C4; border-radius: 8px; break-inside: avoid; }
-        .notes-block h4 { color: #8B4513; margin-bottom: 8px; }
+        .page-card { margin-bottom: 0; border: none; border-radius: 0; overflow: hidden; page-break-inside: auto; break-inside: auto; }
+        .page-card img { width: 100%; height: auto; max-height: 96vh; object-fit: contain; }
+        .page-label { display: none; }
+        .notes-block { margin-top: 12px; padding: 12px; border: 1px solid #ccc; break-inside: avoid; }
+        .notes-block h4 { color: #8B4513; margin-bottom: 6px; }
         .notes-block pre { white-space: pre-wrap; font-family: inherit; font-size: 0.9rem; line-height: 1.6; }
         @media print {
-            body { padding: 0; }
-            .page-card { border: 1px solid #ccc; }
+            body { padding: 0; margin: 0; }
+            .page-card { border: none; margin: 0; padding: 0; page-break-after: always; }
+            .page-card:last-of-type { page-break-after: avoid; }
+            .page-card img { width: 100%; height: auto; max-height: 100vh; object-fit: contain; }
+            .page-label { display: none; }
         }
     </style>
 </head>
