@@ -1,0 +1,444 @@
+const SHLOKA_MAP = {
+  "1": [
+    "shloka1_page1.png",
+    "shloka1_page2.png",
+    "shloka1_page3.png"
+  ],
+  "2": [
+    "shloka2_page1.png",
+    "shloka2_page2.png",
+    "shloka2_page3.png",
+    "shloka2_page4.png",
+    "shloka2_page5.png",
+    "shloka2_page6.png",
+    "shloka2_page7.png"
+  ],
+  "3": [
+    "shloka3_page1.png",
+    "shloka3_page2.png",
+    "shloka3_page3.png",
+    "shloka3_page4.png",
+    "shloka3_page5.png"
+  ],
+  "4": [
+    "shloka4_page1.png",
+    "shloka4_page2.png",
+    "shloka4_page3.png",
+    "shloka4_page4.png",
+    "shloka4_page5.png",
+    "shloka4_page6.png"
+  ],
+  "5": [
+    "shloka5_page1.png",
+    "shloka5_page2.png",
+    "shloka5_page3.png",
+    "shloka5_page4.png"
+  ],
+  "6": [
+    "shloka6_page1.png",
+    "shloka6_page2.png",
+    "shloka6_page3.png",
+    "shloka6_page4.png",
+    "shloka6_page5.png",
+    "shloka6_page6.png",
+    "shloka6_page7.png",
+    "shloka6_page8.png",
+    "shloka6_page9.png"
+  ],
+  "7": [
+    "shloka7_page1.png",
+    "shloka7_page2.png",
+    "shloka7_page3.png",
+    "shloka7_page4.png",
+    "shloka7_page5.png",
+    "shloka7_page6.png",
+    "shloka7_page7.png",
+    "shloka7_page8.png",
+    "shloka7_page9.png",
+    "shloka7_page10.png"
+  ],
+  "8": [
+    "shloka8_page1.png",
+    "shloka8_page2.png",
+    "shloka8_page3.png",
+    "shloka8_page4.png",
+    "shloka8_page5.png",
+    "shloka8_page6.png",
+    "shloka8_page7.png",
+    "shloka8_page8.png"
+  ],
+  "9": [
+    "shloka9_page1.png",
+    "shloka9_page2.png",
+    "shloka9_page3.png",
+    "shloka9_page4.png",
+    "shloka9_page5.png",
+    "shloka9_page6.png",
+    "shloka9_page7.png"
+  ],
+  "11": [
+    "shloka11_page1.png",
+    "shloka11_page2.png",
+    "shloka11_page3.png",
+    "shloka11_page4.png",
+    "shloka11_page5.png",
+    "shloka11_page6.png",
+    "shloka11_page7.png",
+    "shloka11_page8.png",
+    "shloka11_page9.png"
+  ],
+  "12": [
+    "shloka12_page1.png",
+    "shloka12_page2.png",
+    "shloka12_page3.png"
+  ],
+  "13": [
+    "shloka13_page1.png",
+    "shloka13_page2.png",
+    "shloka13_page3.png",
+    "shloka13_page4.png"
+  ],
+  "14": [
+    "shloka14_page1.png",
+    "shloka14_page2.png",
+    "shloka14_page3.png",
+    "shloka14_page4.png",
+    "shloka14_page5.png"
+  ],
+  "15": [
+    "shloka15_page1.png",
+    "shloka15_page2.png",
+    "shloka15_page3.png",
+    "shloka15_page4.png"
+  ],
+  "16": [
+    "shloka16_page1.png",
+    "shloka16_page2.png",
+    "shloka16_page3.png",
+    "shloka16_page4.png",
+    "shloka16_page5.png"
+  ],
+  "17": [
+    "shloka17_page1.png",
+    "shloka17_page2.png",
+    "shloka17_page3.png",
+    "shloka17_page4.png"
+  ],
+  "18": [
+    "shloka18_page1.png",
+    "shloka18_page2.png",
+    "shloka18_page3.png",
+    "shloka18_page4.png"
+  ],
+  "19": [
+    "shloka19_page1.png",
+    "shloka19_page2.png",
+    "shloka19_page3.png",
+    "shloka19_page4.png",
+    "shloka19_page5.png"
+  ],
+  "20": [
+    "shloka20_page1.png",
+    "shloka20_page2.png",
+    "shloka20_page3.png",
+    "shloka20_page4.png",
+    "shloka20_page5.png",
+    "shloka20_page6.png"
+  ],
+  "21": [
+    "shloka21_page1.png",
+    "shloka21_page2.png",
+    "shloka21_page3.png"
+  ],
+  "22": [
+    "shloka22_page1.png",
+    "shloka22_page2.png",
+    "shloka22_page3.png",
+    "shloka22_page4.png"
+  ],
+  "23": [
+    "shloka23_page1.png",
+    "shloka23_page2.png",
+    "shloka23_page3.png",
+    "shloka23_page4.png"
+  ],
+  "24": [
+    "shloka24_page1.png",
+    "shloka24_page2.png",
+    "shloka24_page3.png"
+  ],
+  "25": [
+    "shloka25_page1.png",
+    "shloka25_page2.png",
+    "shloka25_page3.png",
+    "shloka25_page4.png"
+  ],
+  "26": [
+    "shloka26_page1.png",
+    "shloka26_page2.png",
+    "shloka26_page3.png"
+  ],
+  "27": [
+    "shloka27_page1.png",
+    "shloka27_page2.png",
+    "shloka27_page3.png"
+  ],
+  "29": [
+    "shloka29_page1.png",
+    "shloka29_page2.png",
+    "shloka29_page3.png",
+    "shloka29_page4.png",
+    "shloka29_page5.png",
+    "shloka29_page6.png",
+    "shloka29_page7.png",
+    "shloka29_page8.png"
+  ],
+  "30": [
+    "shloka30_page1.png",
+    "shloka30_page2.png",
+    "shloka30_page3.png"
+  ],
+  "31": [
+    "shloka31_page1.png",
+    "shloka31_page2.png",
+    "shloka31_page3.png",
+    "shloka31_page4.png",
+    "shloka31_page5.png"
+  ],
+  "33": [
+    "shloka33_page1.png",
+    "shloka33_page2.png",
+    "shloka33_page3.png",
+    "shloka33_page4.png",
+    "shloka33_page5.png",
+    "shloka33_page6.png",
+    "shloka33_page7.png",
+    "shloka33_page8.png"
+  ],
+  "34": [
+    "shloka34_page1.png",
+    "shloka34_page2.png",
+    "shloka34_page3.png",
+    "shloka34_page4.png"
+  ],
+  "35": [
+    "shloka35_page1.png",
+    "shloka35_page2.png",
+    "shloka35_page3.png",
+    "shloka35_page4.png"
+  ],
+  "36": [
+    "shloka36_page1.png",
+    "shloka36_page2.png",
+    "shloka36_page3.png",
+    "shloka36_page4.png"
+  ],
+  "37": [
+    "shloka37_page1.png",
+    "shloka37_page2.png",
+    "shloka37_page3.png"
+  ],
+  "38": [
+    "shloka38_page1.png",
+    "shloka38_page2.png",
+    "shloka38_page3.png"
+  ],
+  "39": [
+    "shloka39_page1.png",
+    "shloka39_page2.png",
+    "shloka39_page3.png"
+  ],
+  "40": [
+    "shloka40_page1.png",
+    "shloka40_page2.png",
+    "shloka40_page3.png",
+    "shloka40_page4.png"
+  ],
+  "41": [
+    "shloka41_page1.png",
+    "shloka41_page2.png",
+    "shloka41_page3.png"
+  ],
+  "42": [
+    "shloka42_page1.png",
+    "shloka42_page2.png",
+    "shloka42_page3.png"
+  ],
+  "43": [
+    "shloka43_page1.png",
+    "shloka43_page2.png",
+    "shloka43_page3.png"
+  ],
+  "44": [
+    "shloka44_page1.png",
+    "shloka44_page2.png",
+    "shloka44_page3.png",
+    "shloka44_page4.png",
+    "shloka44_page5.png"
+  ],
+  "45": [
+    "shloka45_page1.png",
+    "shloka45_page2.png",
+    "shloka45_page3.png"
+  ],
+  "46": [
+    "shloka46_page1.png",
+    "shloka46_page2.png",
+    "shloka46_page3.png"
+  ],
+  "47": [
+    "shloka47_page1.png",
+    "shloka47_page2.png",
+    "shloka47_page3.png"
+  ],
+  "48": [
+    "shloka48_page1.png",
+    "shloka48_page2.png",
+    "shloka48_page3.png"
+  ],
+  "49": [
+    "shloka49_page1.png",
+    "shloka49_page2.png",
+    "shloka49_page3.png"
+  ],
+  "50": [
+    "shloka50_page1.png",
+    "shloka50_page2.png",
+    "shloka50_page3.png"
+  ],
+  "51": [
+    "shloka51_page1.png",
+    "shloka51_page2.png",
+    "shloka51_page3.png"
+  ],
+  "52": [
+    "shloka52_page1.png",
+    "shloka52_page2.png",
+    "shloka52_page3.png"
+  ],
+  "53": [
+    "shloka53_page1.png",
+    "shloka53_page2.png",
+    "shloka53_page3.png"
+  ],
+  "54": [
+    "shloka54_page1.png",
+    "shloka54_page2.png",
+    "shloka54_page3.png"
+  ],
+  "55": [
+    "shloka55_page1.png",
+    "shloka55_page2.png",
+    "shloka55_page3.png"
+  ],
+  "56": [
+    "shloka56_page1.png",
+    "shloka56_page2.png",
+    "shloka56_page3.png"
+  ],
+  "57": [
+    "shloka57_page1.png",
+    "shloka57_page2.png",
+    "shloka57_page3.png"
+  ],
+  "59": [
+    "shloka59_page1.png",
+    "shloka59_page2.png",
+    "shloka59_page3.png",
+    "shloka59_page4.png",
+    "shloka59_page5.png",
+    "shloka59_page6.png",
+    "shloka59_page7.png",
+    "shloka59_page8.png",
+    "shloka59_page9.png",
+    "shloka59_page10.png",
+    "shloka59_page11.png",
+    "shloka59_page12.png",
+    "shloka59_page13.png"
+  ],
+  "60": [
+    "shloka60_page1.png",
+    "shloka60_page2.png",
+    "shloka60_page3.png",
+    "shloka60_page4.png",
+    "shloka60_page5.png"
+  ],
+  "61": [],
+  "62": [
+    "shloka62_page1.png",
+    "shloka62_page2.png",
+    "shloka62_page3.png"
+  ],
+  "63": [
+    "shloka63_page1.png",
+    "shloka63_page2.png",
+    "shloka63_page3.png",
+    "shloka63_page4.png",
+    "shloka63_page5.png",
+    "shloka63_page6.png",
+    "shloka63_page7.png",
+    "shloka63_page8.png",
+    "shloka63_page9.png"
+  ],
+  "64": [
+    "shloka64_page1.png",
+    "shloka64_page2.png",
+    "shloka64_page3.png"
+  ],
+  "65": [
+    "shloka65_page1.png",
+    "shloka65_page2.png",
+    "shloka65_page3.png"
+  ],
+  "66": [
+    "shloka66_page1.png",
+    "shloka66_page2.png",
+    "shloka66_page3.png",
+    "shloka66_page4.png"
+  ],
+  "67": [
+    "shloka67_page1.png",
+    "shloka67_page2.png",
+    "shloka67_page3.png"
+  ],
+  "68": [
+    "shloka68_page1.png",
+    "shloka68_page2.png",
+    "shloka68_page3.png"
+  ],
+  "69": [
+    "shloka69_page1.png",
+    "shloka69_page2.png",
+    "shloka69_page3.png"
+  ],
+  "70": [
+    "shloka70_page1.png",
+    "shloka70_page2.png",
+    "shloka70_page3.png",
+    "shloka70_page4.png",
+    "shloka70_page5.png"
+  ],
+  "71": [
+    "shloka71_page1.png",
+    "shloka71_page2.png",
+    "shloka71_page3.png",
+    "shloka71_page4.png"
+  ],
+  "72": [
+    "shloka72_page1.png",
+    "shloka72_page2.png",
+    "shloka72_page3.png"
+  ],
+  "73": [
+    "shloka73_page1.png",
+    "shloka73_page2.png",
+    "shloka73_page3.png"
+  ],
+  "74": [
+    "shloka74_page1.png",
+    "shloka74_page2.png",
+    "shloka74_page3.png",
+    "shloka74_page4.png",
+    "shloka74_page5.png"
+  ]
+};
