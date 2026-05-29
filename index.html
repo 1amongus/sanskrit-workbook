@@ -380,11 +380,21 @@
             .toolbar { padding: 12px 16px; }
         }
 
+        .btn-pdf { background: #D32F2F; color: white; }
+        .btn-pdf:hover { background: #B71C1C; }
+
         /* Print styles */
         @media print {
-            .sidebar, .toolbar { display: none; }
-            .content-area { padding: 0; }
-            .exercise-page-card { box-shadow: none; border: 1px solid #ccc; }
+            .sidebar, .toolbar, .overlay, .notes-section, .btn { display: none !important; }
+            body { display: block; height: auto; overflow: visible; }
+            .main-content { overflow: visible; }
+            .content-area { padding: 0; overflow: visible; }
+            .exercise-container { max-width: 100%; }
+            .exercise-header { box-shadow: none; border: 1px solid #ccc; break-after: avoid; }
+            .exercise-page-card { box-shadow: none; border: 1px solid #ccc; break-inside: avoid; page-break-inside: avoid; margin-bottom: 12px; }
+            .exercise-page-card img { max-width: 100%; height: auto; }
+            .exercise-pages { gap: 8px; }
+            .pdf-header-print { display: block !important; text-align: center; margin-bottom: 16px; font-size: 1.1rem; color: #333; border-bottom: 2px solid #8B4513; padding-bottom: 8px; }
         }
 
         /* Animations */
@@ -427,6 +437,9 @@
             <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
             <h2 id="toolbarTitle">संक्षेपरामायणम् - Workbook</h2>
             <div class="toolbar-actions">
+                <button class="btn btn-pdf" id="downloadPdfBtn" onclick="downloadPdf()" style="display:none" title="Download this exercise as PDF">
+                    📄 Download PDF
+                </button>
                 <button class="btn btn-secondary nav-btn" onclick="navigateExercise(-1)" title="Previous">◀</button>
                 <button class="btn btn-secondary nav-btn" onclick="navigateExercise(1)" title="Next">▶</button>
                 <button class="btn btn-success" id="markCompleteBtn" onclick="toggleComplete()" style="display:none">
@@ -541,6 +554,7 @@
         btn.style.display = 'inline-flex';
         btn.textContent = isComplete ? '✓ Completed' : '☐ Mark Complete';
         btn.className = isComplete ? 'btn btn-success' : 'btn btn-primary';
+        document.getElementById('downloadPdfBtn').style.display = 'inline-flex';
 
         renderChapterList();
         toggleSidebar(false);
@@ -628,6 +642,87 @@
             updateProgress();
             renderChapterList();
         }
+    }
+
+    // Download current exercise as PDF (via print dialog)
+    function downloadPdf() {
+        if (currentExercise === null) return;
+        const ex = exercises[currentExercise];
+
+        // Create a print-friendly window with just this exercise
+        const printWin = window.open('', '_blank', 'width=800,height=900');
+        if (!printWin) {
+            alert('Please allow popups to download PDF.');
+            return;
+        }
+
+        let imagesHtml = ex.pages.map((page, i) =>
+            `<div class="page-card">
+                <img src="exercise_images/${page}" alt="Page ${i+1}">
+                <div class="page-label">Page ${i+1} of ${ex.pages.length}</div>
+            </div>`
+        ).join('');
+
+        let notesHtml = '';
+        if (notes[ex.number]) {
+            notesHtml = `<div class="notes-block">
+                <h4>📝 Notes</h4>
+                <pre>${notes[ex.number]}</pre>
+            </div>`;
+        }
+
+        printWin.document.write(`<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>अभ्यासः ${ex.number} - ${ex.info}</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', sans-serif; padding: 24px; color: #333; }
+        .header { text-align: center; border-bottom: 2px solid #8B4513; padding-bottom: 12px; margin-bottom: 20px; }
+        .header h1 { font-size: 1.3rem; color: #8B4513; }
+        .header p { font-size: 0.9rem; color: #666; margin-top: 4px; }
+        .page-card { margin-bottom: 16px; border: 1px solid #ddd; border-radius: 8px; overflow: hidden; break-inside: avoid; page-break-inside: avoid; }
+        .page-card img { width: 100%; height: auto; display: block; }
+        .page-label { padding: 6px 12px; font-size: 0.75rem; color: #888; border-top: 1px solid #eee; }
+        .notes-block { margin-top: 20px; padding: 16px; border: 1px solid #E8D5C4; border-radius: 8px; break-inside: avoid; }
+        .notes-block h4 { color: #8B4513; margin-bottom: 8px; }
+        .notes-block pre { white-space: pre-wrap; font-family: inherit; font-size: 0.9rem; line-height: 1.6; }
+        @media print {
+            body { padding: 0; }
+            .page-card { border: 1px solid #ccc; }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>अभ्यासः ${ex.number}</h1>
+        <p>${ex.info}</p>
+    </div>
+    ${imagesHtml}
+    ${notesHtml}
+    <script>
+        // Wait for images to load, then trigger print
+        let imgs = document.querySelectorAll('img');
+        let loaded = 0;
+        function checkPrint() {
+            loaded++;
+            if (loaded >= imgs.length) {
+                setTimeout(function() { window.print(); }, 300);
+            }
+        }
+        if (imgs.length === 0) {
+            setTimeout(function() { window.print(); }, 300);
+        } else {
+            imgs.forEach(function(img) {
+                if (img.complete) { checkPrint(); }
+                else { img.onload = checkPrint; img.onerror = checkPrint; }
+            });
+        }
+    <\/script>
+</body>
+</html>`);
+        printWin.document.close();
     }
 
     // Keyboard navigation
